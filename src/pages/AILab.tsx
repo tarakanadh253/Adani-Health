@@ -92,7 +92,7 @@ const AILab = () => {
     setIsTyping(true);
 
     try {
-      const res = await fetch('http://localhost:8000/api/bot/chat/', {
+      const res = await fetch('https://web-production-3180c.up.railway.app/api/bot/chat/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

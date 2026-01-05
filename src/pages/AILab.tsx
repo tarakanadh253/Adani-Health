@@ -52,7 +52,14 @@ const AILab = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<string>("gemini-2.5-flash-lite");
+  const [selectedModel, setSelectedModel] = useState<string>(() => {
+    const saved = localStorage.getItem('health_app_model');
+    const validModels = ["gpt-4o-mini", "gpt-4o", "gpt-3.5-turbo"];
+    if (saved && validModels.includes(saved)) {
+      return saved;
+    }
+    return "gpt-4o-mini";
+  });
   const [isListening, setIsListening] = useState(false);
   const [recordCounts, setRecordCounts] = useState({ documents: 0, moms: 0, contracts: 0 });
 
@@ -170,24 +177,22 @@ const AILab = () => {
 
         {/* Model Selector */}
         <div className="flex items-center gap-2 bg-muted/50 rounded-lg p-1">
-          <SelectUI value={selectedModel} onValueChange={(val: any) => setSelectedModel(val)}>
+          <SelectUI
+            value={selectedModel}
+            onValueChange={(val: string) => {
+              setSelectedModel(val);
+              localStorage.setItem('health_app_model', val);
+            }}
+          >
             <SelectTrigger className="w-[280px]">
               <SelectValue placeholder="Select Model" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Models</SelectLabel>
-                <SelectItem value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</SelectItem>
-                <SelectItem value="gemini-2.5-flash-tts">gemini-2.5-flash-tts</SelectItem>
-                <SelectItem value="gemini-2.5-flash">gemini-2.5-flash</SelectItem>
-                <SelectItem value="gemini-3-flash">gemini-3-flash</SelectItem>
-                <SelectItem value="gemini-robotics-er-1.5-preview">gemini-robotics-er-1.5-preview</SelectItem>
-                <SelectItem value="gemma-3-12b">gemma-3-12b</SelectItem>
-                <SelectItem value="gemma-3-1b">gemma-3-1b</SelectItem>
-                <SelectItem value="gemma-3-27b">gemma-3-27b</SelectItem>
-                <SelectItem value="gemma-3-2b">gemma-3-2b</SelectItem>
-                <SelectItem value="gemma-3-4b">gemma-3-4b</SelectItem>
-                <SelectItem value="gemini-2.5-flash-native-audio-dialog">gemini-2.5-flash-native-audio-dialog</SelectItem>
+                <SelectItem value="gpt-4o-mini">gpt-4o-mini</SelectItem>
+                <SelectItem value="gpt-4o">gpt-4o</SelectItem>
+                <SelectItem value="gpt-3.5-turbo">gpt-3.5-turbo</SelectItem>
               </SelectGroup>
             </SelectContent>
           </SelectUI>

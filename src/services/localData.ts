@@ -184,13 +184,15 @@ export const localDataService = {
 
     async getAPSData(projectId?: string): Promise<any> {
         // Fetch all APS related data
+        const queryParams = projectId ? `?projectId=${projectId}` : '';
+
         const [projects, issues, approvals, meetings, reviews, files] = await Promise.all([
             fetch(`${BASE_URL}/aps-projects`).then(r => r.json()),
-            fetch(`${BASE_URL}/aps-issues`).then(r => r.json()),
-            fetch(`${BASE_URL}/aps-approvals`).then(r => r.json()),
-            fetch(`${BASE_URL}/aps-meetings`).then(r => r.json()),
-            fetch(`${BASE_URL}/aps-reviews`).then(r => r.json()),
-            fetch(`${BASE_URL}/aps-files`).then(r => r.json())
+            fetch(`${BASE_URL}/aps-issues${queryParams}`).then(r => r.json()),
+            fetch(`${BASE_URL}/aps-approvals${queryParams}`).then(r => r.json()),
+            fetch(`${BASE_URL}/aps-meetings${queryParams}`).then(r => r.json()),
+            fetch(`${BASE_URL}/aps-reviews${queryParams}`).then(r => r.json()),
+            fetch(`${BASE_URL}/aps-files${queryParams}`).then(r => r.json())
         ]);
 
         return {

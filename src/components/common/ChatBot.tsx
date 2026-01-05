@@ -13,10 +13,33 @@ interface Message {
 export function ChatBot() {
     const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([]);
+
+    // Initialize state from localStorage
+    const [messages, setMessages] = useState<Message[]>(() => {
+        const saved = localStorage.getItem('chat_history');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                return parsed.map((m: any) => ({
+                    ...m,
+                    timestamp: new Date(m.timestamp)
+                }));
+            } catch (e) {
+                console.error("Failed to parse chat history", e);
+                return [];
+            }
+        }
+        return [];
+    });
+
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Persist messages
+    useEffect(() => {
+        localStorage.setItem('chat_history', JSON.stringify(messages));
+    }, [messages]);
 
     useEffect(() => {
         if (isOpen && messages.length === 0) {
@@ -25,16 +48,15 @@ export function ChatBot() {
                 ? `Hi, ${user.name}! How can I help you today?`
                 : "Hi there! How can I help you today?";
 
-            setMessages([
-                {
-                    id: '1',
-                    text: greeting,
-                    sender: 'bot',
-                    timestamp: new Date()
-                }
-            ]);
+            const initialMsg = {
+                id: '1',
+                text: greeting,
+                sender: 'bot' as const,
+                timestamp: new Date()
+            };
+            setMessages([initialMsg]);
         }
-    }, [isOpen, user]);
+    }, [isOpen, user]); // messages dependency removed to avoid loops, purely purely on open if empty
 
     useEffect(() => {
         scrollToBottom();
@@ -64,7 +86,15 @@ export function ChatBot() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ text: newUserMessage.text, userId: user?.name || 'guest' })
+                body: JSON.stringify({
+                    text: newUserMessage.text,
+                    userId: user?.name || 'guest',
+                    model: (() => {
+                        const saved = localStorage.getItem('health_app_model');
+                        const validModels = ["gpt-4o-mini", "gpt-4o", "gpt-3.5-turbo"];
+                        return (saved && validModels.includes(saved)) ? saved : "gpt-4o-mini";
+                    })()
+                })
             });
 
             if (!response.ok) throw new Error('Failed to get response');

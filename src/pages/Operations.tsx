@@ -98,6 +98,7 @@ const categoryIcons = {
 };
 
 const Operations = () => {
+  const { hasPermission } = useAuth();
   const [activeTab, setActiveTab] = useState("helpdesk");
   const [searchTerm, setSearchTerm] = useState("");
   const [tickets, setTickets] = useState<Ticket[]>([]);

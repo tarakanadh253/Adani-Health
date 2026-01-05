@@ -35,8 +35,11 @@ const App = () => (
           <Routes>
             <Route path="/login" element={<Login />} />
 
+            {/* Public Root (Login) */}
+            <Route path="/" element={<Login />} />
+
             {/* Protected Routes */}
-            <Route path="/" element={<ProtectedRoute module="dashboard"><Index /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute module="dashboard"><Index /></ProtectedRoute>} />
             <Route path="/clinical" element={<ProtectedRoute module="clinical"><Clinical /></ProtectedRoute>} />
             <Route path="/sourcing" element={<ProtectedRoute module="sourcing"><Sourcing /></ProtectedRoute>} />
             <Route path="/assets" element={<ProtectedRoute module="assets"><Assets /></ProtectedRoute>} />

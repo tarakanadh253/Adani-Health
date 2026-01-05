@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { localDataService } from "@/services/localData";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -85,6 +86,7 @@ const priorityColors = {
 };
 
 const DesignControl = () => {
+  const { hasPermission } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("deliverables");
 

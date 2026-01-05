@@ -17,6 +17,7 @@ import { RoomDataSheet } from "@/types";
 // Data moved to state
 
 const Clinical = () => {
+  const { hasPermission } = useAuth();
   const [roomDataSheets, setRoomDataSheets] = useState<RoomDataSheet[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<RoomDataSheet | null>(null);
   const [viewMode, setViewMode] = useState<"3d" | "2d" | "rds">("3d");

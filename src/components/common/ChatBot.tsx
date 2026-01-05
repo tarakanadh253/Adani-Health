@@ -15,6 +15,7 @@ export function ChatBot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -37,7 +38,7 @@ export function ChatBot() {
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
+    }, [messages, isLoading]); // Scroll on loading state change too
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -55,6 +56,7 @@ export function ChatBot() {
 
         setMessages(prev => [...prev, newUserMessage]);
         setInputText('');
+        setIsLoading(true);
 
         try {
             const response = await fetch('http://localhost:8000/api/bot/chat/', {
@@ -86,6 +88,8 @@ export function ChatBot() {
                 timestamp: new Date()
             };
             setMessages(prev => [...prev, errorResponse]);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -98,9 +102,9 @@ export function ChatBot() {
                     className="fixed bottom-6 right-6 p-4 gradient-primary text-white rounded-full shadow-lg hover:opacity-90 transition-all duration-300 z-50 hover:scale-110"
                 >
                     <img
-                        src="/UT%20Logo%20(Orange%20Border).png"
+                        src="/Adani_Health_favi_icon.png"
                         alt="Chat"
-                        className="w-8 h-8 object-contain"
+                        className="w-8 h-8 object-cover rounded-full"
                     />
                 </button>
             )}
@@ -114,9 +118,9 @@ export function ChatBot() {
                         <div className="flex items-center gap-2">
                             <div className="p-2 bg-primary/20 rounded-full">
                                 <img
-                                    src="/UT%20Logo%20(Orange%20Border).png"
+                                    src="/Adani_Health_favi_icon.png"
                                     alt="Bot"
-                                    className="w-5 h-5 object-contain"
+                                    className="w-5 h-5 object-cover rounded-full"
                                 />
                             </div>
                             <div>
@@ -152,6 +156,15 @@ export function ChatBot() {
                                 </div>
                             </div>
                         ))}
+                        {isLoading && (
+                            <div className="flex justify-start">
+                                <div className="bg-white/10 p-4 rounded-2xl rounded-bl-none flex gap-1.5 items-center">
+                                    <span className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                                    <span className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                    <span className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce"></span>
+                                </div>
+                            </div>
+                        )}
                         <div ref={messagesEndRef} />
                     </div>
 

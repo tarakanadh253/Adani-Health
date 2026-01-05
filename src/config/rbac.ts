@@ -1,4 +1,4 @@
-export type UserRole = 
+export type UserRole =
   | 'executive'
   | 'project_manager'
   | 'clinical_lead'
@@ -11,7 +11,7 @@ export type UserRole =
 
 export type AccessLevel = 'full' | 'edit' | 'view' | 'approver' | 'none';
 
-export type ModuleName = 
+export type ModuleName =
   | 'dashboard'
   | 'design'
   | 'clinical'
@@ -179,7 +179,7 @@ export const DEMO_USERS: Record<UserRole, { email: string; name: string; }> = {
 };
 
 export const MODULE_ROUTES: Record<ModuleName, string[]> = {
-  dashboard: ['/'],
+  dashboard: ['/dashboard'],
   design: ['/design'],
   clinical: ['/clinical'],
   construction: ['/construction'],

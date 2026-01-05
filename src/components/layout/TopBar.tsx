@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { localDataService } from "@/services/localData";
-import { Bell, Search, User, Clock, Wifi, Settings, LogOut, FileText, CheckCircle, AlertTriangle, Box, Folder } from "lucide-react";
+import { Bell, Search, User, Clock, Wifi, Settings, LogOut, FileText, CheckCircle, AlertTriangle, Box, Folder, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -43,13 +43,22 @@ export function TopBar() {
     const debounce = setTimeout(handleSearch, 300);
     return () => clearTimeout(debounce);
   }, [searchQuery]);
-  const currentTime = new Date().toLocaleTimeString("en-IN", {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const timeString = currentDate.toLocaleTimeString("en-IN", {
     hour: "2-digit",
     minute: "2-digit",
     timeZone: "Asia/Kolkata",
   });
 
-  const currentDate = new Date().toLocaleDateString("en-IN", {
+  const dateString = currentDate.toLocaleDateString("en-IN", {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -170,10 +179,10 @@ export function TopBar() {
         <div className="h-4 w-px bg-border" />
         <div className="flex items-center gap-2 text-sm">
           <Clock className="w-4 h-4 text-primary" />
-          <span className="font-mono text-foreground">{currentTime}</span>
+          <span className="font-mono text-foreground">{timeString}</span>
           <span className="text-muted-foreground">IST</span>
         </div>
-        <div className="text-xs text-muted-foreground">{currentDate}</div>
+        <div className="text-xs text-muted-foreground">{dateString}</div>
       </div>
 
       {/* Right: Actions */}

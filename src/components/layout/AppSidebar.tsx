@@ -23,7 +23,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const navigation: { name: string; href: string; icon: any; description: string; module?: ModuleName }[] = [
-  { name: "Mission Control", href: "/", icon: LayoutDashboard, description: "Executive Dashboard", module: 'dashboard' },
+  { name: "Mission Control", href: "/dashboard", icon: LayoutDashboard, description: "Executive Dashboard", module: 'dashboard' },
   { name: "Handover", href: "/handover", icon: ClipboardCheck, description: "Commissioning", module: 'handover' },
   { name: "7D Asset Registry", href: "/assets", icon: Database, description: "O&M Assets", module: 'assets' },
   { name: "CV Analytics", href: "/cv-analytics", icon: Eye, description: "Computer Vision", module: 'ai_cv' },
@@ -49,7 +49,7 @@ export function AppSidebar() {
   const location = useLocation();
   const { hasPermission } = useAuth();
 
-  const filterNav = (items: typeof navigation) => {
+  const filterNav = (items: { name: string; href: string; icon: any; description?: string; module?: ModuleName }[]) => {
     return items.filter(item => !item.module || hasPermission(item.module, 'view'));
   };
 
@@ -101,8 +101,8 @@ export function AppSidebar() {
       {/* Logo */}
       <div className="flex items-center h-16 px-4 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center shadow-glow">
-            <Activity className="w-6 h-6 text-primary-foreground" />
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-glow overflow-hidden">
+            <img src="/Adani_Health_favi_icon.png" alt="Adani Health" className="w-full h-full object-cover" />
           </div>
           {!collapsed && (
             <div className="animate-fade-in">

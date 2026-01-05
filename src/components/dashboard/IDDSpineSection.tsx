@@ -5,7 +5,6 @@ import {
   Filter, AlertTriangle, TrendingDown, Truck, Settings2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { P6Milestone } from "@/types";
@@ -163,7 +162,7 @@ export const IDDSpineSection = () => {
                   const progress = displayProgress;
                   const isComplete = (i / 16) * 100 < progress;
                   const isActive = Math.abs((i / 16) * 100 - progress) < 10;
-                  
+
                   // Mock zone assignment for visual filtering
                   const blockZone = zones[(i % (zones.length - 1)) + 1];
                   const isHidden = selectedZone !== 'All Zones' && blockZone !== selectedZone;
@@ -275,89 +274,7 @@ export const IDDSpineSection = () => {
         </div>
       </div>
 
-      {/* Timeline Controls */}
-      <div className="bg-card rounded-xl p-6 border border-border/50 shadow-card animate-slide-up" style={{ animationDelay: "100ms" }}>
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-primary" />
-              <span className="font-medium text-foreground">4D Timeline Simulation</span>
-            </div>
-            <div className="h-4 w-px bg-border" />
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">Mode:</span>
-              <span className="font-medium text-foreground">
-                {viewMode === 'planned' ? 'Planned Schedule' : 'Planned vs Actual'}
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" onClick={() => setTimelinePosition([Math.max(0, timelinePosition[0] - 1)])}>
-              <SkipBack className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={isPlaying ? "secondary" : "default"}
-              size="icon"
-              onClick={() => setIsPlaying(!isPlaying)}
-            >
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setTimelinePosition([Math.min(timelineMilestones.length - 1, timelinePosition[0] + 1)])}
-            >
-              <SkipForward className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
 
-        {/* Timeline Slider */}
-        <div className="mb-6">
-          <Slider
-            value={timelinePosition}
-            onValueChange={handleSliderChange}
-            max={timelineMilestones.length - 1}
-            step={1}
-            className="w-full"
-          />
-        </div>
-
-        {/* Milestone Labels */}
-        <div className="flex justify-between overflow-x-auto pb-2">
-          {timelineMilestones.map((milestone, index) => (
-            <div
-              key={milestone.date}
-              className={cn(
-                "text-center transition-all duration-300 cursor-pointer min-w-[80px]",
-                index === timelinePosition[0] && "scale-110"
-              )}
-              onClick={() => setTimelinePosition([index])}
-            >
-              <div
-                className={cn(
-                  "w-3 h-3 rounded-full mx-auto mb-2 transition-all",
-                  index < timelinePosition[0] && "bg-success",
-                  index === timelinePosition[0] && "bg-primary ring-4 ring-primary/20",
-                  index > timelinePosition[0] && "bg-muted border-2 border-border"
-                )}
-              />
-              <p className={cn(
-                "text-xs font-medium",
-                index === timelinePosition[0] ? "text-primary" : "text-muted-foreground"
-              )}>
-                {milestone.date}
-              </p>
-              <p className={cn(
-                "text-[10px] mt-0.5 max-w-[80px] truncate mx-auto",
-                index === timelinePosition[0] ? "text-foreground" : "text-muted-foreground/70"
-              )}>
-                {milestone.phase}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* 5D Cost Timeline & At-Risk Predictions */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6">
